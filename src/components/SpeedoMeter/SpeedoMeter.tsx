@@ -3,7 +3,15 @@ import { useEffect, useRef, useState } from "react";
 const SpeedoBar = () => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const canvasCtxRef = useRef<CanvasRenderingContext2D | null>(null);
-    const [speed, setSpeed] = useState<number>(120);
+    const [speed, setSpeed] = useState<number>(0);
+
+    useEffect(() => {
+        let timer: any;
+        if (speed < 180) {
+            timer = setInterval(() => setSpeed(speed + 1), 1000);
+        }
+        return () => clearInterval(timer);
+    }, [speed]);
 
     useEffect(() => {
         if (canvasRef.current) {
