@@ -88,6 +88,7 @@ const SpeedoBar = () => {
             timer = setInterval(() => setSpeed(speed + 1), 1000);
         }
         return () => clearInterval(timer);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [speed]);
 
     return (
