@@ -93,7 +93,6 @@ const SpeedoBar = () => {
 
     return (
         <>
-
             <canvas ref={canvasRef} className="canvas" id="myCanvas" width="500" height="500" />
         </>
     );
