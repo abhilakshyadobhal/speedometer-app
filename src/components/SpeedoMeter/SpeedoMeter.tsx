@@ -31,6 +31,15 @@ const SpeedoBar = () => {
             ctx?.stroke();
             ctx?.closePath();
             ctx?.restore();
+
+            // speedarc
+            ctx?.beginPath();
+            ctx?.arc(centerX, centerY, speedArcRadius - 140, 0, Math.PI, true);
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = "white";
+            ctx?.stroke();
+            ctx?.closePath();
+            ctx?.restore();
             ctx?.beginPath();
 
             ctx?.beginPath();
@@ -73,7 +82,7 @@ const SpeedoBar = () => {
             }
             ctx.font = "20px Verdana";
             ctx.fillStyle = "white";
-            ctx?.fillText(`${speed} kmh`, -40, 20);
+            ctx?.fillText(`${speed} kmh`, -40,0);
             ctx?.closePath();
             ctx?.restore();
             ctx?.translate(-centerX, -centerY);
