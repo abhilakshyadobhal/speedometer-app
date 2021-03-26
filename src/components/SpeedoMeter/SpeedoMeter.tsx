@@ -5,30 +5,33 @@ const SpeedoBar = () => {
     const canvasCtxRef = useRef<CanvasRenderingContext2D | null>(null);
     const [speed, setSpeed] = useState<number>(0);
 
-    useEffect(() => {
-        let timer: any;
-        if (speed < 180) {
-            timer = setInterval(() => setSpeed(speed + 1), 1000);
-        }
-        return () => clearInterval(timer);
-    }, [speed]);
-
-    useEffect(() => {
+    const createCanvas = () => {
         if (canvasRef.current) {
             canvasCtxRef.current = canvasRef.current.getContext('2d');
             let canvas = canvasRef.current;
             let ctx: any = canvasCtxRef.current;
-            // ctx?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+            ctx?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
-            const radius = canvas.height / 2;
+            const radius = canvas.height / 2 - 20;
+            const speedArcRadius = canvas.height / 2 - 20;
             ctx?.beginPath();
-            ctx?.arc(centerX, centerY, radius, 0, Math.PI * 2,);
+            ctx?.arc(centerX, centerY, radius, 0, Math.PI * 2);
 
             ctx.fillStyle = "black";
             ctx?.fill();
             ctx?.closePath();
             ctx?.restore();
+
+            // speedarc
+            ctx?.beginPath();
+            ctx?.arc(centerX, centerY, speedArcRadius, 1.55, -4.7 + ((speed / 10) / 3.9));
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = "orange";
+            ctx?.stroke();
+            ctx?.closePath();
+            ctx?.restore();
+            ctx?.beginPath();
 
             ctx?.beginPath();
             ctx.strokeStyle = "white";
@@ -49,9 +52,9 @@ const SpeedoBar = () => {
                     oPointX = sineAngle * (radius - radius / 7);
                     oPointY = cosAngle * (radius - radius / 7);
 
-                    wPointX = sineAngle * (radius - radius / 2.5);
-                    wPointY = cosAngle * (radius - radius / 2.5);
-                    ctx?.fillText((i), wPointX - 2, wPointY + 4);
+                    wPointX = sineAngle * (radius - radius / 3);
+                    wPointY = cosAngle * (radius - radius / 3);
+                    ctx?.fillText(i, wPointX - 2, wPointY + 4);
                 }
                 else {
                     ctx.fillStyle = "white";
@@ -68,18 +71,6 @@ const SpeedoBar = () => {
                 ctx?.stroke();
                 ctx?.closePath();
             }
-
-            // ctx?.beginPath();
-            // ctx.strokeStyle = '#000000';
-            // ctx?.arc(0, 0, 19, 0, 2 * Math.PI, true);
-            // ctx?.fill();
-            // ctx?.closePath();
-
-            // ctx?.beginPath();
-            // ctx.lineWidth = 6;
-            // ctx?.moveTo(0, 0);
-            // ctx?.lineTo(pointX, pointY);
-            // ctx?.stroke();
             ctx.font = "20px Verdana";
             ctx.fillStyle = "white";
             ctx?.fillText(`${speed} kmh`, -40, 20);
@@ -88,16 +79,21 @@ const SpeedoBar = () => {
             ctx?.translate(-centerX, -centerY);
 
         }
+    }
 
-    }, [speed])
+    useEffect(() => {
+        let timer: any;
+        if (speed <= 220) {
+            createCanvas();
+            timer = setInterval(() => setSpeed(speed + 1), 1000);
+        }
+        return () => clearInterval(timer);
+    }, [speed]);
 
     return (
         <>
 
             <canvas ref={canvasRef} className="canvas" id="myCanvas" width="500" height="500" />
-            <input type="number" min={0} max={180} value={speed} onChange={(e) => {
-                setSpeed(Number(e.target.value))
-            }} />
         </>
     );
 }
